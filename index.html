@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Form</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    function login() {
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+      var loginEndpointUrl = document.getElementById("loginEndpointUrl").value || "https://fairos.staging.fairdatasociety.org";
+
+      var data = {
+        userName: username,
+        password: password
+      };
+      console.log(data)
+      $.ajax({
+        url: loginEndpointUrl+"/v2/user/login",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: JSON.stringify(data),
+        success: function(response) {
+          var accessToken = response.accessToken;
+          document.getElementById("result").innerHTML = "Login Successful! Access Token: " + accessToken;
+        },
+        error: function() {
+          document.getElementById("result").innerHTML = "Failed to login";
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+  <h1>Login Form</h1>
+  <label for="loginEndpointUrl">FairOS server URL:</label>
+  <input type="text" id="loginEndpointUrl" value="https://fairos.staging.fairdatasociety.org" placeholder="Enter the login endpoint URL">
+  <br><br>
+  <label for="username">Username:</label>
+  <input type="text" id="username" placeholder="Enter your username">
+  <br><br>
+  <label for="password">Password:</label>
+  <input type="password" id="password" placeholder="Enter your password">
+  <br><br>
+  <button onclick="login()">Login</button>
+  <br><br>
+  <div id="result"></div>
+</body>
+</html>
